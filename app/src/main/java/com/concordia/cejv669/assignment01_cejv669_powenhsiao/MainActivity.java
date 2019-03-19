@@ -17,11 +17,12 @@ public class MainActivity extends AppCompatActivity {
     Float mValue1, mValue2, TempValue, resultValue, tempResult;
     Boolean boolPlus = false, boolMinus = false, boolMultiple = false,
             boolDivided = false, boolEqual = false, boolArithmetic = false,
-            boolTempResult = false;
+            boolTempResult = false, boolArithmeticChange = false;
     ArrayList<String> myHistoryList = new ArrayList<>();
     EditText result;
     TextView lblTempResult;
-    String strTempResult, tempNumber;
+    String strTempResult1, strTempResult2, tempNumber;
+    Integer countNumber = 0, countArithmetic = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,17 +60,27 @@ public class MainActivity extends AppCompatActivity {
     public void numberClick(int number) {
         result = findViewById(R.id.txtResult);
         String resultNumber = result.getText().toString();
+        // reset countArithmetic
+        countArithmetic = 0;
+        // for condition boolArithmeticChange
+        boolArithmeticChange = false;
 
         if (resultNumber.equals("0")) {
             result.setText(number + "");
+            countNumber += 1;
         } else {
             if (boolArithmetic == true || boolEqual == true) {
-                
-                tempNumber = number + "";
+                if (countNumber == 0) {
+                    tempNumber = number + "";
+                    result.setText(tempNumber + "");
+                } else {
+                    tempNumber = result.getText().toString() + number;
+                    result.setText(tempNumber + "");
 
-                result.setText(tempNumber + "");
-               // tempNumber = result.getText().toString();
+                }
+                countNumber += 1;
                 boolEqual = false;
+                boolArithmetic = false;
             } else {
 
                 result.setText(result.getText().toString() + number);
@@ -79,32 +90,58 @@ public class MainActivity extends AppCompatActivity {
 
     public void arithmeticClick(String symbol) {
         boolArithmetic = true;
-
-        // in case click arithmetic after click equal
-        if (boolEqual == true) {
-            lblTempResult.setText(mValue1 + " " + symbol + " ");
-            strTempResult = lblTempResult.getText().toString();
-            boolTempResult = true;
-        } else {
-            // if use arithmetic more than 2 numbers
-            if (boolTempResult == true) {
-                mValue2 = Float.parseFloat(result.getText().toString());
-                calulate(mValue1, mValue2);
-                result.setText(tempResult + "");
-                mValue1 = tempResult;
-
-                lblTempResult.setText(strTempResult + mValue2 + " " + symbol + " ");
-                strTempResult = lblTempResult.getText().toString();
-            } else {
+        // // reset countNumber
+        countNumber = 0;
+        // to check if arithmetic change
+        if (boolArithmeticChange == true)
+        {
+            lblTempResult.setText(strTempResult2 + " " + symbol + " ");
+            strTempResult1 = lblTempResult.getText().toString();
+        }
+        else {
+            // in case click arithmetic after click equal
+            if (boolEqual == true) {
                 mValue1 = Float.parseFloat(result.getText().toString());
+
+                strTempResult2 = mValue1 + "";
+
                 lblTempResult.setText(mValue1 + " " + symbol + " ");
-                strTempResult = lblTempResult.getText().toString();
+                strTempResult1 = lblTempResult.getText().toString();
+
+
                 boolTempResult = true;
+                boolEqual = false;
+            } else {
+                // if use arithmetic more than 2 numbers
+                if (boolTempResult == true) {
+                    mValue2 = Float.parseFloat(result.getText().toString());
+
+                    calculate(mValue1, mValue2);
+                    result.setText(tempResult + "");
+                    mValue1 = tempResult;
+
+                    strTempResult2 = strTempResult1 + mValue2;
+
+                    lblTempResult.setText(strTempResult1 + mValue2 + " " + symbol + " ");
+                    strTempResult1 = lblTempResult.getText().toString();
+
+
+                } else {
+                    mValue1 = Float.parseFloat(result.getText().toString());
+
+                    strTempResult2 = mValue1 + "";
+
+                    lblTempResult.setText(mValue1 + " " + symbol + " ");
+                    strTempResult1 = lblTempResult.getText().toString();
+
+                    boolTempResult = true;
+                }
             }
+            boolArithmeticChange = true;
         }
     }
 
-    public float calulate(float num1, float num2) {
+    public float calculate(float num1, float num2) {
         if (boolPlus == true) {
             tempResult = num1 + num2;
             result.setText(tempResult + "");
@@ -129,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
 
         return tempResult;
     }
+
 
     public void btnClick(View view) {
         lblTempResult = findViewById(R.id.lblTempResult);
@@ -209,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
                 boolEqual = true;
                 mValue2 = Float.parseFloat(result.getText().toString());
 
-                calulate(mValue1, mValue2);
+                calculate(mValue1, mValue2);
 
                 resultValue = tempResult;
 
@@ -219,13 +257,18 @@ public class MainActivity extends AppCompatActivity {
                 myHistoryList.add(String.valueOf(lblTempResult.getText().toString() + mValue2 + " = " + resultValue + "\n"));
 
                 lblTempResult.setText("");
+                countNumber = 0;
                 break;
 
             // extra button
 
             case (R.id.btnClear):
-                lblTempResult.setText(null);
+                lblTempResult.setText("");
+                strTempResult1 = "";
+                strTempResult2 = "";
                 result.setText(0 + "");
+                countNumber = 0;
+                mValue1 = Float.parseFloat("0");
                 break;
             case (R.id.btnPlusMinus):
                 TempValue = -Float.parseFloat(result.getText().toString());

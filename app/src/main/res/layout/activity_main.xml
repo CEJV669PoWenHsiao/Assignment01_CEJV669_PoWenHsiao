@@ -122,7 +122,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/button_background"
-            android:backgroundTint="@color/colorGray"
             android:onClick="btnClick"
             android:text="/"
             android:textSize="24sp" />
@@ -170,7 +169,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/button_background"
-            android:backgroundTint="@color/colorGray"
             android:onClick="btnClick"
             android:text="*"
             android:textSize="24sp" />
@@ -219,7 +217,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/button_background"
-            android:backgroundTint="@color/colorGray"
             android:onClick="btnClick"
             android:text="-"
             android:textSize="24sp" />
@@ -267,7 +264,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/button_background"
-            android:backgroundTint="@color/colorGray"
             android:onClick="btnClick"
             android:text="+"
             android:textSize="24sp" />
